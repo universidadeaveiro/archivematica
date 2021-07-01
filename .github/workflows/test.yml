@@ -6,6 +6,7 @@ on:
     branches:
       - "qa/**"
       - "stable/**"
+      - "dev/issue-1467-fix-processing-config-in-bags"
 jobs:
   test:
     name: "Test ${{ matrix.rule }}"

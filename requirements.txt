@@ -70,7 +70,7 @@ gunicorn==19.9.0
     # via -r requirements.in
 idna==3.2
     # via requests
-importlib-metadata==4.6.1
+importlib-metadata==4.8.1
     # via
     #   click
     #   pep517
@@ -108,7 +108,7 @@ pep517==0.12.0
     # via pip-tools
 pip-tools==6.4.0
     # via -r requirements.in
-prometheus-client==0.7.1
+prometheus-client==0.11.0
     # via
     #   -r requirements.in
     #   django-prometheus
@@ -167,7 +167,7 @@ six==1.14.0
     #   python-dateutil
 tomli==1.2.1
     # via pep517
-typing-extensions==3.10.0.0
+typing-extensions==3.10.0.2
     # via importlib-metadata
 unidecode==0.04.19
     # via -r requirements.in
@@ -180,7 +180,7 @@ wheel==0.37.0
     # via pip-tools
 whitenoise==3.3.0
     # via -r requirements.in
-zipp==3.5.0
+zipp==3.6.0
     # via
     #   importlib-metadata
     #   pep517

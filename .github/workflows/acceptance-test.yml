@@ -1,14 +1,15 @@
 ---
 name: "Acceptance Test"
 on:
-  pull_request:
-    types: [labeled]
+  push:
+    branches:
+      - dev/issue-959-partial-reingest-amauats
 jobs:
   test:
-    if: github.event.label.name == 'AMAUAT'
     name: "Test ${{ matrix.tag }} on ${{ matrix.browser }}"
     runs-on: "ubuntu-18.04"
     strategy:
+      fail-fast: false
       matrix:
         tag:
           - "aip-encrypt"
@@ -24,13 +25,6 @@ jobs:
         browser:
           - "Firefox"
           - "Chrome"
-        exclude:
-          - tag: "black-box"
-            browser: Firefox
-          - tag: "ipc preservation"
-            browser: Firefox
-          - tag: "ipc access"
-            browser: Firefox
     steps:
       - name: "Check out repository"
         uses: "actions/checkout@v2"

@@ -372,7 +372,6 @@ def _get_index_settings():
     return {
         "index": {
             "mapping": {
-                "ignore_malformed": True,
                 "total_fields": {"limit": TOTAL_FIELDS_LIMIT},
                 "depth": {"limit": DEPTH_LIMIT},
             },
@@ -1024,7 +1023,7 @@ def _get_file_metadata(file_pointer_division, doc):
         elements_with_metadata += _get_descriptive_section_metadata(dmd_sec)
     if elements_with_metadata:
         result = _combine_elements(elements_with_metadata)
-    return result
+    return _normalize_dict(result)
 
 
 def _get_directory_metadata(directory, doc):
@@ -1062,7 +1061,7 @@ def _get_directory_metadata(directory, doc):
         # add an attribute with the relative path of the Directory entry
         elements_with_metadata.append(_get_relative_path_element(directory))
         result = _combine_elements(elements_with_metadata)
-    return result
+    return _normalize_dict(result)
 
 
 def _get_aip_metadata(doc):
@@ -1114,6 +1113,33 @@ def _rename_list_elements_if_they_are_dicts(data):
         elif isinstance(value, dict):
             data[index] = _rename_dict_keys_with_child_dicts(value)
     return data
+
+
+def _normalize_dict(data):
+    """Normalize dictionary from xmltodict for ES indexing.
+
+    Because an XML element may contain text value or other elements, conversion
+    to a dict can result in different value types for the same key. This causes
+    problems in the Elasticsearch index as it expects consistent types. This
+    function recurses a dict and appends "_dict" to the keys with a dict value.
+    """
+    new = {}
+    for key, value in data.items():
+        dict_key = key + "_dict"
+        if isinstance(value, dict):
+            new[dict_key] = _normalize_dict(value)
+        elif isinstance(value, list):
+            for item in value:
+                new_key = key
+                if isinstance(item, dict):
+                    new_key = dict_key
+                    item = _normalize_dict(item)
+                if new_key not in new:
+                    new[new_key] = []
+                new[new_key].append(item)
+        else:
+            new[key] = value
+    return new
 
 
 def _normalize_dict_values(data):

@@ -25,7 +25,7 @@ volumes:
 services:
 
   mysql:
-    image: "percona:5.6"
+    image: "mariadb:10.7"
     user: "mysql"
     command: "--character-set-server=utf8 --collation-server=utf8_general_ci"
     environment:
@@ -70,16 +70,14 @@ services:
     volumes:
       - "archivematica_pipeline_data:/var/archivematica/sharedDirectory:rw"  # Read and write needed!
 
-  # clamavd:
-  #   image: "artefactual/clamav:latest"
-  #   environment:
-  #     CLAMAV_MAX_FILE_SIZE: "42"
-  #     CLAMAV_MAX_SCAN_SIZE: "42"
-  #     CLAMAV_MAX_STREAM_LENGTH: "100"
-  #   ports:
-  #     - "127.0.0.1:62006:3310"
-  #   volumes:
-  #     - "archivematica_pipeline_data:/var/archivematica/sharedDirectory:ro"
+  clamavd:
+    image: "clamav/clamav:latest"
+    environment:
+      CLAMAV_MAX_FILE_SIZE: "42"
+      CLAMAV_MAX_SCAN_SIZE: "42"
+      CLAMAV_MAX_STREAM_LENGTH: "100"
+    volumes:
+      - "archivematica_pipeline_data:/var/archivematica/sharedDirectory:ro"
 
   nginx:
     image: "nginx:stable-alpine"
@@ -134,11 +132,11 @@ services:
       ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_MCPARCHIVEMATICASERVER: "gearmand:4730"
       ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_SEARCH_ENABLED: "${AM_SEARCH_ENABLED:-true}"
       ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CAPTURE_CLIENT_SCRIPT_OUTPUT: "${AM_CAPTURE_CLIENT_SCRIPT_OUTPUT:-true}"
-      # ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CLAMAV_SERVER: "clamavd:3310"
-      # ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CLAMAV_CLIENT_MAX_FILE_SIZE: "42"
-      # ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CLAMAV_CLIENT_MAX_SCAN_SIZE: "42"
-      # ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CLAMAV_CLIENT_MAX_STREAM_LENGTH: "100"
-      # ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CLAMAV_CLIENT_BACKEND: "clamdscanner" # Option: clamdscanner or clamscan;
+      ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CLAMAV_SERVER: "clamavd:3310"
+      ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CLAMAV_CLIENT_MAX_FILE_SIZE: "42"
+      ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CLAMAV_CLIENT_MAX_SCAN_SIZE: "42"
+      ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CLAMAV_CLIENT_MAX_STREAM_LENGTH: "100"
+      ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_CLAMAV_CLIENT_BACKEND: "clamdscanner" # Option: clamdscanner or clamscan;
       ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_PROMETHEUS_BIND_PORT: "7999"
       ARCHIVEMATICA_MCPCLIENT_MCPCLIENT_PROMETHEUS_BIND_ADDRESS: "0.0.0.0"
     volumes:

@@ -1,9 +1,12 @@
 [submodule "hack/submodules/archivematica-storage-service"]
 	path = hack/submodules/archivematica-storage-service
 	url = git@github.com:universidadeaveiro/archivematica-storage-service.git
+	branch = stable/0.18.x
 [submodule "hack/submodules/archivematica-sampledata"]
 	path = hack/submodules/archivematica-sampledata
 	url = git@github.com:universidadeaveiro/archivematica-sampledata.git
+	branch = master
 [submodule "hack/submodules/archivematica-acceptance-tests"]
 	path = hack/submodules/archivematica-acceptance-tests
 	url = git@github.com:universidadeaveiro/archivematica-acceptance-tests.git
+	branch = stable/1.13.x

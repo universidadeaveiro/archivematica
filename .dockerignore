@@ -10,6 +10,9 @@
 !/LICENSE
 !/COPYRIGHT
 !/TRADEMARK
+!/hack/entrypoints/mcp-server-entrypoint.sh
+!/hack/entrypoints/mcp-client-entrypoint.sh
+!/hack/entrypoints/dashboard-entrypoint.sh
 
 # Exclude
 src/dashboard/frontend/node_modules

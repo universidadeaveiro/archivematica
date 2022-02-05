@@ -106,7 +106,9 @@ FROM ${PYTHON_VERSION} AS archivematica-mcp-client
 COPY src/archivematicaCommon/lib/externals/fido/ /usr/lib/archivematica/archivematicaCommon/externals/fido/
 COPY src/archivematicaCommon/lib/externals/fiwalk_plugins/ /usr/lib/archivematica/archivematicaCommon/externals/fiwalk_plugins/
 
-USER archivematica
+COPY hack/entrypoints/mcp-client-entrypoint.sh /
+
+#USER archivematica
 
 ENV DJANGO_SETTINGS_MODULE settings.common
 ENV PYTHONPATH /src/src/MCPClient/lib/:/src/src/MCPClient/lib/clientScripts:/src/src/archivematicaCommon/lib/:/src/src/dashboard/src/
@@ -114,22 +116,28 @@ ENV ARCHIVEMATICA_MCPCLIENT_ARCHIVEMATICACLIENTMODULES /src/src/MCPClient/lib/ar
 ENV ARCHIVEMATICA_MCPCLIENT_CLIENTASSETSDIRECTORY /src/src/MCPClient/lib/assets/
 ENV ARCHIVEMATICA_MCPCLIENT_CLIENTSCRIPTSDIRECTORY /src/src/MCPClient/lib/clientScripts/
 
-ENTRYPOINT ["/src/src/MCPClient/lib/archivematicaClient.py"]
+ENTRYPOINT ["sh", "/mcp-client-entrypoint.sh"]
 
 # -----------------------------------------------------------------------------
 
 FROM ${PYTHON_VERSION} AS archivematica-mcp-server
 
-USER archivematica
+COPY hack/entrypoints/mcp-server-entrypoint.sh /
+
+RUN set -ex \
+	chmod +x /mcp-server-entrypoint.sh
+
 
 ENV DJANGO_SETTINGS_MODULE settings.common
 ENV PYTHONPATH /src/src/MCPServer/lib/:/src/src/archivematicaCommon/lib/:/src/src/dashboard/src/
 
-ENTRYPOINT ["/src/src/MCPServer/lib/archivematicaMCP.py"]
+ENTRYPOINT ["sh", "mcp-server-entrypoint.sh"]
 
 # -----------------------------------------------------------------------------
 
 FROM ${PYTHON_VERSION} AS archivematica-dashboard
+
+COPY hack/entrypoints/dashboard-entrypoint.sh /
 
 RUN set -ex \
 	&& internalDirs=' \
@@ -158,7 +166,9 @@ ENV DJANGO_SETTINGS_MODULE settings.production
 
 EXPOSE 8000
 
-ENTRYPOINT ["/usr/local/bin/gunicorn", "--config=/src/src/dashboard/install/dashboard.gunicorn-config.py", "wsgi:application"]
+USER root
+
+ENTRYPOINT ["sh", "/dashboard-entrypoint.sh"]
 
 # -----------------------------------------------------------------------------
 

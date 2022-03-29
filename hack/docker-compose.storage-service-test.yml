@@ -1,0 +1,64 @@
+---
+version: "2.1"
+
+volumes:
+
+  # Internal named volumes.
+  # These are not accessible outside of the docker host and are maintained by
+  # Docker.
+  mysql_data:
+  archivematica_storage_service_staging_data:
+
+  # External named volumes.
+  # These are intended to be accessible beyond the docker host (e.g. via NFS).
+  # They use bind mounts to mount a specific "local" directory on the docker
+  # host - the expectation being that these directories are actually mounted
+  # filesystems from elsewhere.
+  archivematica_storage_service_location_data:
+    external:
+      name: "ss-location-data"
+
+services:
+
+  mysql:
+    image: "mariadb:10.7"
+    user: "mysql"
+    command: "--character-set-server=utf8 --collation-server=utf8_general_ci"
+    environment:
+      MYSQL_ROOT_PASSWORD: "12345"
+      # These are used in the settings.testmysql modules
+      MYSQL_USER: "archivematica"
+      MYSQL_PASSWORD: "demo"
+    volumes:
+      - "./etc/mysql/tuning.cnf:/etc/my.cnf.d/tuning.cnf:ro"
+      - "mysql_data:/var/lib/mysql"
+    ports:
+      - "127.0.0.1:62001:3306"
+
+  archivematica-storage-service:
+    build:
+      context: "submodules/archivematica-storage-service"
+      args:
+        TARGET: "archivematica-storage-service"
+    environment:
+      FORWARDED_ALLOW_IPS: "*"
+      SS_GUNICORN_ACCESSLOG: "/dev/null"
+      SS_GUNICORN_RELOAD: "true"
+      SS_GUNICORN_RELOAD_ENGINE: "auto"
+      DJANGO_SETTINGS_MODULE: "storage_service.settings.local"
+      SS_DB_URL: "mysql://archivematica:demo@mysql/SS"
+      SS_GNUPG_HOME_PATH: "/var/archivematica/storage_service/.gnupg"
+      SS_PROMETHEUS_ENABLED: "true"
+      SS_CAS_AUTHENTICATION: "true"
+    volumes:
+      - "./submodules/archivematica-storage-service/:/src/"
+      - "./submodules/archivematica-sampledata/:/home/archivematica/archivematica-sampledata/:ro"
+      - "/mnt/archivematica-nfs/archivematica_pipeline_data:/var/archivematica/sharedDirectory:rw"
+      - "archivematica_storage_service_staging_data:/var/archivematica/storage_service:rw"
+      - "/mnt/archivematica-nfs/archivematica_storage_service_location_data:/home:rw"
+      - "/mnt/archivematica-nfs/dip-uploads:/var/dip-uploads:rw"
+      - "/test-data:/test-data:rw"
+    links:
+      - "mysql"
+    ports:
+      - "0.0.0.0:443:8000"

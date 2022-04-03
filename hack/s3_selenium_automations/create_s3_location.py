@@ -11,7 +11,11 @@ class AppDynamicsJob(unittest.TestCase):
     def setUp(self):
         # AppDynamics will automatically override this web driver
         # as documented in https://docs.appdynamics.com/display/PRO44/Write+Your+First+Script
-        self.driver = webdriver.Firefox()
+        
+        print("Starting driver... ")
+        ops = webdriver.FirefoxOptions()
+        ops.add_argument('--headless')
+        self.driver = webdriver.Firefox(options=ops)
         self.driver.implicitly_wait(30)
         self.base_url = "https://www.google.com/"
         self.verificationErrors = []
@@ -19,24 +23,47 @@ class AppDynamicsJob(unittest.TestCase):
     
     def test_app_dynamics_job(self):
         driver = self.driver
+        cas_enabled = False
+
         # Open Webpage
         print("Accessing Archivematica Storage Service's Web Page")
-        driver.get("https://django-cas-ng-demo-server.herokuapp.com/cas/login?service=http%3A%2F%2Fstic-archivematica.ua.pt%3A443%2Flogin%2F%3Fnext%3D%252F")
+
+        if cas_enabled:
+            driver.get("https://django-cas-ng-demo-server.herokuapp.com/cas/login?service=http%3A%2F%2Fstic-archivematica.ua.pt%3A443%2Flogin%2F%3Fnext%3D%252F")
+        else:
+            driver.get("http://stic-archivematica.ua.pt:8080/login/?next=/")
 
         # Login
         print("Proceeding to Login...")
         driver.find_element_by_id("id_username").click()
         driver.find_element_by_id("id_username").clear()
-        driver.find_element_by_id("id_username").send_keys("admin")
+
+        if cas_enabled:
+            driver.find_element_by_id("id_username").send_keys("admin")
+        else:
+            driver.find_element_by_id("id_username").send_keys("test")
+            driver.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Administration'])[1]/following::div[1]").click()
+
         driver.find_element_by_id("id_password").click()
         driver.find_element_by_id("id_password").clear()
-        driver.find_element_by_id("id_password").send_keys("django-cas-ng")
-        driver.find_element_by_xpath("//button[@type='submit']").click()
+
+        if cas_enabled:
+            driver.find_element_by_id("id_password").send_keys("django-cas-ng")
+            driver.find_element_by_xpath("//button[@type='submit']").click()
+        else:
+            driver.find_element_by_id("id_password").send_keys("test")
+            driver.find_element_by_xpath("//input[@value='Log in']").click()
+
         print("Login Successful!")
 
         # Create S3 Space Location
         print("Creating S3 Space Location...")
-        driver.get("http://stic-archivematica.ua.pt:443/")
+
+        if cas_enabled:
+            driver.get("http://stic-archivematica.ua.pt:443/")
+        else:
+            driver.get("http://stic-archivematica.ua.pt:8080/")
+            
         driver.find_element_by_link_text("Spaces").click()
         driver.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Actions'])[2]/following::a[1]").click()
         driver.find_element_by_link_text("Create Location here").click()

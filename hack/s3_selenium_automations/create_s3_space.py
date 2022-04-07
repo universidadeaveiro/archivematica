@@ -71,7 +71,7 @@ class AppDynamicsJob(unittest.TestCase):
         Select(driver.find_element_by_id("id_space-access_protocol")).select_by_visible_text("S3")
         driver.find_element_by_id("id_space-staging_path").click()
         driver.find_element_by_id("id_space-staging_path").clear()
-        driver.find_element_by_id("id_space-staging_path").send_keys("/var/uploads")
+        driver.find_element_by_id("id_space-staging_path").send_keys("/tmp")
         driver.find_element_by_id("id_protocol-endpoint_url").click()
         driver.find_element_by_id("id_protocol-endpoint_url").clear()
         driver.find_element_by_id("id_protocol-endpoint_url").send_keys("https://s3.amazonaws.com/")

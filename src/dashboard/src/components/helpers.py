@@ -383,11 +383,18 @@ def stream_mets_from_storage_service(
 
 
 def stream_file_from_storage_service(
-    url, error_message="Remote URL returned {}", preview_file=False
+    url, error_message="Remote URL returned {}", preview_file=False, requester=None
 ):
     # Repetetive or constant values to use below when seeting the headers.
     storage_timeout = django_settings.STORAGE_SERVICE_CLIENT_TIMEOUT
-    stream = requests.get(url, stream=True, timeout=storage_timeout)
+    # Rafael Direito's Code
+    stream = None
+    if not requester:
+        stream = requests.get(url, stream=True, timeout=storage_timeout)
+    else:
+        payload = {"requester":requester.email}
+        stream = requests.get(url, stream=True, timeout=storage_timeout, params=payload)
+    # End of Rafael Direito's Code
     if stream.status_code != 200:
         response = {
             "success": False,

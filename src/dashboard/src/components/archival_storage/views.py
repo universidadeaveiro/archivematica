@@ -534,9 +534,13 @@ def create_aic(request):
 
 
 def aip_download(request, uuid):
+    print("USER HERE")
+    print(request.user.email)
     redirect_url = storage_service.download_file_url(uuid)
     return helpers.stream_file_from_storage_service(
-        redirect_url, "Storage service returned {}; check logs?"
+        url = redirect_url,
+        error_message = "Storage service returned {}; check logs?",
+        requester = request.user
     )
 
 

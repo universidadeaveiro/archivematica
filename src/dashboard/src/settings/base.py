@@ -467,7 +467,7 @@ LOGGING = {
         "archivematica.mcp": {"propagate": False},
         "archivematica": {"level": "DEBUG"},
         "elasticsearch": {"level": "INFO"},
-        "agentarchives": {"level": "INFO"},
+        "agentarchives": {"level": "INFO"}
     },
     "root": {"handlers": ["console"], "level": "WARNING"},
 }
@@ -621,6 +621,8 @@ if OIDC_AUTHENTICATION:
     AUTHENTICATION_BACKENDS += ["components.accounts.backends.CustomOIDCBackend"]
     LOGIN_EXEMPT_URLS.append(r"^oidc")
     INSTALLED_APPS += ["mozilla_django_oidc"]
+
+    LOGGING['loggers']['mozilla_django_oidc'] = { 'level': 'DEBUG' }
 
     from .components.oidc_auth import *  # noqa
 

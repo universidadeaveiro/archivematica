@@ -28,7 +28,12 @@ else:
     OIDC_OP_USER_ENDPOINT = os.environ["OIDC_OP_USER_ENDPOINT"]
     OIDC_OP_JWKS_ENDPOINT = os.environ.get("OIDC_OP_JWKS_ENDPOINT", "")
 
+OIDC_TOKEN_USE_BASIC_AUTH = True
+
 OIDC_RP_SIGN_ALGO = os.environ.get("OIDC_RP_SIGN_ALGO", "HS256")
+
+OIDC_RP_SCOPES="openid preferred_username middle_name formatted updated_at email upn sub nMecFunc studentNumber nickname given_name keplerNumber User_Roles locality gender UA_IUPI region family_name email_verified name profile locale phone_number_verified zoneinfo picture postal_code street_address website groups address phone_number birthdate country iss acr"
+OIDC_RP_SCOPES="openid email profile phone address"
 
 # Username is email address
 OIDC_USERNAME_ALGO = lambda email: email  # noqa

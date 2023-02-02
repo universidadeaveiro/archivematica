@@ -22,7 +22,7 @@ import json
 import sys
 from pathlib import Path
 
-OSDEPS_DIRS = ("dashboard/osdeps", "MCPServer/osdeps", "MCPClient/osdeps")
+SERVICES = ("dashboard", "MCPServer", "MCPClient")
 
 try:
     distro = sys.argv[1]
@@ -33,6 +33,18 @@ try:
     stage = int(sys.argv[2])
 except (IndexError, ValueError):
     sys.exit('Missing argument: stage, e.g. "1"')
+
+try:
+    service = sys.argv[3]
+    
+    if service not in SERVICES:
+        sys.exit(f'Unknown service "{service}", valid options: {", ".join(SERVICES)}')
+
+    dep_services = tuple([service])
+except (IndexError):
+    dep_services = SERVICES
+
+OSDEPS_DIRS = tuple(s + "/osdeps" for s in dep_services)
 
 src_dir = Path(__file__).parents[1] / "src"
 

@@ -1,0 +1,1 @@
+docker build -t archivematica-nginx -f hack/dockerfiles/nginx/Dockerfile .

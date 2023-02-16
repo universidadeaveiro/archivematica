@@ -1,0 +1,1 @@
+docker build -t archivematica-mcp-client -f hack/dockerfiles/mcp-client/Dockerfile .

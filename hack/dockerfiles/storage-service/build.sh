@@ -1,0 +1,1 @@
+docker build -t archivematica-storage-service -f hack/dockerfiles/storage-service/Dockerfile hack/submodules/archivematica-storage-service

@@ -1,0 +1,1 @@
+docker build -t archivematica-dashboard-testing -f hack/dockerfiles/dashboard-testing/Dockerfile .

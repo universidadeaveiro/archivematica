@@ -1,0 +1,1 @@
+docker build -t archivematica-tests -f hack/dockerfiles/tests/Dockerfile .

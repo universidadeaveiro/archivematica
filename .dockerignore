@@ -3,6 +3,7 @@
 
 # Include
 !/hack/osdeps.py
+!/hack/submodules/**
 !/src/**
 !/pytest.ini
 !/requirements*

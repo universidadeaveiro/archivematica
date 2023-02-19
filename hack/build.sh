@@ -9,10 +9,13 @@ while getopts 'as:' OPTION; do
     a)
         printf "Building all images...\n"
 
-        for folder in ./dockerfiles/*; do
+        cd ..
+        base_url=$(pwd)
+
+        for folder in ./hack/dockerfiles/*; do
           printf "Running build.sh on $folder...\n\n"
           
-          cd "$folder" && chmod +x build.sh && ./build.sh
+          sh $folder/build.sh
           PREVIOUS_COMMAND_STATUS="$?"
 
           if [ "$PREVIOUS_COMMAND_STATUS" == "1" ]; then
@@ -22,7 +25,7 @@ while getopts 'as:' OPTION; do
             printf "\nDone!"
           fi
           
-            cd ../..
+            cd $base_url
         done
         ;;
     s)

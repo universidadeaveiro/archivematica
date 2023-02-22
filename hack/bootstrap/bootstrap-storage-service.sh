@@ -1,9 +1,9 @@
 SERVICE="archivematica-storage-service"
 
 SUPERUSER_USERNAME="${SUPERUSER_USERNAME:-test}"
-SUPERUSER_PASSWORD="${SUPERUSER_USERNAME:-test}"
-SUPERUSER_EMAIL="${SUPERUSER_USERNAME:-test@test.com}"
-SUPERUSER_API_KEY="${SUPERUSER_USERNAME:-test}"
+SUPERUSER_PASSWORD="${SUPERUSER_PASSWORD:-test}"
+SUPERUSER_EMAIL="${SUPERUSER_EMAIL:-test@test.com}"
+SUPERUSER_API_KEY="${SUPERUSER_API_KEY:-test}"
 
 sh kubectl-run-command.sh $SERVICE \
 		/src/storage_service/manage.py \

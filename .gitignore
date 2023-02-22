@@ -26,3 +26,6 @@
 src/dashboard/src/static/
 src/dashboard/src/media/js/build
 .DS_Store
+
+# env files
+hack/envs

@@ -36,10 +36,11 @@ services:
       - "127.0.0.1:62001:3306"
 
   archivematica-storage-service:
-    build:
-      context: "submodules/archivematica-storage-service"
-      args:
-        TARGET: "archivematica-storage-service"
+    image: "archivematica-storage-service"
+    restart: always
+    env_file:
+      - ./envs/archivematica-storage-service.env
+      - ./envs/oidc.env
     environment:
       FORWARDED_ALLOW_IPS: "*"
       SS_GUNICORN_ACCESSLOG: "/dev/null"
@@ -49,7 +50,7 @@ services:
       SS_DB_URL: "mysql://archivematica:demo@mysql/SS"
       SS_GNUPG_HOME_PATH: "/var/archivematica/storage_service/.gnupg"
       SS_PROMETHEUS_ENABLED: "true"
-      SS_CAS_AUTHENTICATION: "true"
+      SS_OIDC_AUTHENTICATION: "${OIDC_ENABLED:-true}"
     volumes:
       - "./submodules/archivematica-storage-service/:/src/"
       - "./submodules/archivematica-sampledata/:/home/archivematica/archivematica-sampledata/:ro"
@@ -58,7 +59,5 @@ services:
       - "/mnt/archivematica-nfs/archivematica_storage_service_location_data:/home:rw"
       - "/mnt/archivematica-nfs/dip-uploads:/var/dip-uploads:rw"
       - "/test-data:/test-data:rw"
-    links:
-      - "mysql"
     ports:
       - "0.0.0.0:443:8000"

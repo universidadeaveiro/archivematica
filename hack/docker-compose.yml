@@ -1,3 +1,7 @@
+# @Author: Eduardo Santos
+# @Date:   2023-12-28 16:58:33
+# @Last Modified by:   Eduardo Santos
+# @Last Modified time: 2023-12-28 17:29:26
 ---
 version: "2.1"
 
@@ -171,3 +175,24 @@ services:
       - "archivematica_storage_service_location_data:/home:rw"
       - "/mnt/archivematica-nfs/dip-uploads:/var/dip-uploads:rw"
       - "/test-data:/test-data:rw"
+
+  # S3 File Retrieval
+
+  file_retrieval_api:
+    image: file-retrieval-api
+    ports:
+      - '8080:8080'
+    env_file: env/api.env
+    restart: always
+  
+  polling_api:
+    image: polling
+    env_file: env/polling.env
+    restart: always
+
+  mail_notification_api:
+    image: mail-notification-api
+    ports:
+      - '8081:8080'
+    env_file: env/mail_notification_api.env
+    restart: always

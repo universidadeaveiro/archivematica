@@ -1,0 +1,24 @@
+# @Author: Rafael Direito
+# @Date:   01-06-2022 17:47:34
+# @Last Modified by:   Rafael Direito
+# @Last Modified time: 01-06-2022 18:49:08
+version: "3.8"
+services:
+  file_retrieval_api:
+    image: file-retrieval-api
+    ports:
+      - '8080:8080'
+    env_file: env/api.env
+    restart: always
+  
+  polling_api:
+    image: polling
+    env_file: env/polling.env
+    restart: always
+
+  mail_notification_api:
+    image: mail-notification-api
+    ports:
+      - '8081:8080'
+    env_file: env/mail_notification_api.env
+    restart: always

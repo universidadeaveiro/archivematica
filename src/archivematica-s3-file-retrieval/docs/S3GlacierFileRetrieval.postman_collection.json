@@ -1,0 +1,282 @@
+{
+	"info": {
+		"_postman_id": "58848e02-1ee9-4f27-ae80-85e46b6fd617",
+		"name": "S3 Glacier File Retrieval",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.environment.set(\"auth_token\", jsonData[\"data\"][\"access_token\"]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"***\",\n    \"password\": \"***\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{retrieval_api_url}}/users/login",
+					"host": [
+						"{{retrieval_api_url}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New File Retrieval",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"file_key\": \"test-dir/test63.txt\",\n    \"bucket_name\": \"arquivo-test-bucket-2\",\n    \"requesters_email\": \"eduardodireito@ua.pt\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{retrieval_api_url}}/files/retrieve",
+					"host": [
+						"{{retrieval_api_url}}"
+					],
+					"path": [
+						"files",
+						"retrieve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get File Retrieval Status",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"file_key\": \"test2.txt\",\n    \"bucket_name\": \"arquivo-test-bucket-2\",\n    \"requesters_email\": \"rdireito@ua.pt\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{retrieval_api_url}}/files/retrieval-status/10",
+					"host": [
+						"{{retrieval_api_url}}"
+					],
+					"path": [
+						"files",
+						"retrieval-status",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get File Retrieval Info",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"file_key\": \"test2.txt\",\n    \"bucket_name\": \"arquivo-test-bucket-2\",\n    \"requesters_email\": \"rdireito@ua.pt\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{retrieval_api_url}}/files/retrieval-info/10",
+					"host": [
+						"{{retrieval_api_url}}"
+					],
+					"path": [
+						"files",
+						"retrieval-info",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All File's Retrieval in Database",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"file_key\": \"test2.txt\",\n    \"bucket_name\": \"arquivo-test-bucket-2\",\n    \"requesters_email\": \"rdireito@ua.pt\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{retrieval_api_url}}/files/",
+					"host": [
+						"{{retrieval_api_url}}"
+					],
+					"path": [
+						"files",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get File to Retrieval Base Info",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"file_key\": \"test2.txt\",\n    \"bucket_name\": \"arquivo-test-bucket-2\",\n    \"requesters_email\": \"rdireito@ua.pt\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{retrieval_api_url}}/files/file/10",
+					"host": [
+						"{{retrieval_api_url}}"
+					],
+					"path": [
+						"files",
+						"file",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Files Requested By Each Person",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"file_key\": \"test2.txt\",\n    \"bucket_name\": \"arquivo-test-bucket-2\",\n    \"requesters_email\": \"rdireito@ua.pt\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{retrieval_api_url}}/files/requesters",
+					"host": [
+						"{{retrieval_api_url}}"
+					],
+					"path": [
+						"files",
+						"requesters"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
